@@ -4,15 +4,6 @@ const fragment: Node = document.createDocumentFragment();
 let $pokeBox: HTMLElement = <HTMLElement> document.getElementById("poke-box")
 
 export default async function fetchPokemon() {
-    let urlPokemon: string = "https://pokeapi.co/api/v2/pokemon/"
-    let result = await fetchData(urlPokemon);
-    while (result != null && result != "https://pokeapi.co/api/v2/pokemon/?offset=1000&limit=20") {
-        result = await fetchData(result);
-    }
-    if (result == "https://pokeapi.co/api/v2/pokemon/?offset=1000&limit=20") {
-        result = "https://pokeapi.co/api/v2/pokemon/?offset=1000&limit=10"
-        result = await fetchData(result);
-    }
     $pokeBox.appendChild(fragment)
 }
 
