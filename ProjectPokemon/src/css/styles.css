@@ -1,3 +1,27 @@
 body{
     padding: 15px;
 }
+
+.item{
+    padding: 0 15px;
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.texto{
+    text-align: center;
+    padding: 0 30px;
+}
+
+.contenedor-dentro{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    margin: 15px;
+}
+
+.contenedor-fuera{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
