@@ -4,7 +4,10 @@ const fragment: Node = document.createDocumentFragment();
 const $pokeBox: HTMLElement = <HTMLElement> document.getElementById("poke-box")
 const $pagina: HTMLElement = <HTMLElement> document.getElementById("pagina")
 
-export default async function fetchPokemon() {
+export default function fetchPokemon() {
+    while ($pokeBox.firstChild) {
+        $pokeBox.removeChild($pokeBox.firstChild); // Elimina el primer hijo del elemento <div> repetidamente
+    }
     let urlPokemon: string = "https://pokeapi.co/api/v2/pokemon/?offset="
     let numero: number = parseInt(<string>$pagina.textContent) - 1;
     const pokemon: number = 25;
@@ -49,4 +52,40 @@ export default async function fetchPokemon() {
                 }
             })
         })
+}
+
+export function fetchPokemonFilter(urlPokemons: string[]): void {
+    while ($pokeBox.firstChild) {
+        $pokeBox.removeChild($pokeBox.firstChild); // Elimina el primer hijo del elemento <div> repetidamente
+    }
+    urlPokemons.forEach((pokemon) => {
+        fetch(pokemon)
+        .then(res => res.json())
+        .then((res) => {
+                let nombrePokemon: string = res.name[0].toUpperCase()
+                nombrePokemon += res.name.substring(1)
+                const $div: HTMLElement = document.createElement("div"),
+                    $img: HTMLElement = document.createElement("img"),
+                    $button: HTMLElement = document.createElement("button"),
+                    $namePokemon: Node = document.createTextNode(nombrePokemon),
+                    $divCard: HTMLElement = document.createElement("div")
+    
+                $img.setAttribute("alt", res.name)
+                $img.setAttribute("title", res.name)
+                $img.setAttribute("src", res.sprites.front_default)
+    
+                $div.setAttribute("class", "card m-3 shadow")
+                $div.setAttribute("id", res.name)
+                $img.setAttribute("class", "card-img-top")
+                $divCard.setAttribute("class", "card-body d-flex justify-content-center")
+                $button.setAttribute("class", "btn btn-outline-dark")
+    
+                $button.appendChild($namePokemon)
+                $divCard.appendChild($button)
+                $div.appendChild($img)
+                $div.appendChild($divCard)
+                fragment.appendChild($div)
+                $pokeBox.appendChild(fragment)
+        })
+    })
 }

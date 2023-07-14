@@ -1,10 +1,50 @@
+import { listPokemon, pokemon} from "../../interface/interface";
+import {fetchPokemonFilter} from "../pokemon/fetch_pokemon";
+import fetchPokemon from "../pokemon/fetch_pokemon";
+
 const searchInput = document.getElementById("searchInput") as HTMLInputElement
-const searchForm = document.getElementById("searchForm") as HTMLFormElement
+const searchButton = document.getElementById("searchButton") as HTMLFormElement
 
-searchInput.addEventListener("submit", handleSearchSubmint)
+searchButton.addEventListener("click", handleButtonPress)
+searchInput.addEventListener("keypress", handleSearchSubmint)
 
-function handleSearchSubmint(event: Event) {
+async function handleButtonPress(event: Event) {
     event.preventDefault()
-    const inputValue = searchInput.value;
-    console.log(inputValue)
+    if (searchInput.value == "") {
+        fetchPokemon()
+    } else {
+        let pokemones = await filterName()
+        fetchPokemonFilter(pokemones)
+        console.log(pokemones)
+    }
+}
+
+async function handleSearchSubmint(event: KeyboardEvent) {
+    if (event.key == "Enter") {
+        event.preventDefault()
+        if (searchInput.value == "") {
+            fetchPokemon()
+        } else {
+            let pokemones = await filterName()
+            fetchPokemonFilter(pokemones)
+            console.log(pokemones)
+        }
+    }
+}
+
+async function filterName() {
+    let url: string = "https://pokeapi.co/api/v2/pokemon?limit=100000"
+    let name: string = <string>searchInput.value
+    let listaPokemon: string[] = []
+    let respuesta = await fetch(url)
+    let res: listPokemon = await(respuesta.json())
+    res.results.forEach((pokemon) => {
+        let urlPartida: string[] = pokemon.url.split("/")
+        let numeroPokemon: number = parseInt(urlPartida[6])
+        if (pokemon.name.includes(name) && numeroPokemon < 9999){
+            console.log(name)
+            listaPokemon.push(pokemon.url)
+        }
+    })
+    return listaPokemon
 }
