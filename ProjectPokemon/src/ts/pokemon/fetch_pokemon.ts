@@ -3,6 +3,8 @@ import { listPokemon, pokemon} from "../../interface/interface"
 const fragment: Node = document.createDocumentFragment();
 const $pokeBox: HTMLElement = <HTMLElement> document.getElementById("poke-box")
 const $pagina: HTMLElement = <HTMLElement> document.getElementById("pagina")
+let listaPokemonNombre: string[] = []
+let listaPokemonImagen: string[] = []
 
 export default function fetchPokemon() {
     while ($pokeBox.firstChild) {
@@ -88,4 +90,42 @@ export function fetchPokemonFilter(urlPokemons: string[]): void {
                 $pokeBox.appendChild(fragment)
         })
     })
+}
+
+export async function fetchPokemonImage(){
+    let url: string = "https://pokeapi.co/api/v2/pokemon/?offset="
+    let numero: number = parseInt(<string>$pagina.textContent) - 1;
+    const pokemon: number = 25;
+    numero = numero * pokemon;
+    url += numero+"&limit="+pokemon
+    let respuesta = await(fetch(url))
+    let res: listPokemon = await(respuesta.json())
+    res.results.forEach(async (pokemon) => {
+        let urlPartida: string[] = pokemon.url.split("/")
+        let numeroPokemon: number = parseInt(urlPartida[6])
+        if (numeroPokemon < 9999) {
+            let respuestaPokemon = await(fetch(pokemon.url))
+            let resPokemon : pokemon = await(respuestaPokemon.json())
+            listaPokemonImagen.push(resPokemon.sprites.front_default)
+        }
+    })
+    return listaPokemonImagen
+}
+
+export async function fetchPokemonName(){
+    let url: string = "https://pokeapi.co/api/v2/pokemon/?offset="
+    let numero: number = parseInt(<string>$pagina.textContent) - 1;
+    const pokemon: number = 25;
+    numero = numero * pokemon;
+    url += numero+"&limit="+pokemon
+    let respuesta = await(fetch(url))
+    let res: listPokemon = await(respuesta.json())
+    res.results.forEach(async (pokemon) => {
+        let urlPartida: string[] = pokemon.url.split("/")
+        let numeroPokemon: number = parseInt(urlPartida[6])
+        if (numeroPokemon < 9999) {
+            listaPokemonNombre.push(pokemon.name)
+        }
+    })
+    return listaPokemonNombre
 }

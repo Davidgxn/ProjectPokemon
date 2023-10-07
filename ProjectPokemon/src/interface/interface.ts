@@ -14,4 +14,8 @@ export interface pokemon {
     sprites: {
         front_default: string
     }
+    species: {
+        name: string,
+        url: string
+    }
 }

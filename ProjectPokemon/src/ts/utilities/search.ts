@@ -15,7 +15,6 @@ async function handleButtonPress(event: Event) {
     } else {
         let pokemones = await filterName()
         fetchPokemonFilter(pokemones)
-        console.log(pokemones)
     }
 }
 
@@ -27,7 +26,6 @@ async function handleSearchSubmint(event: KeyboardEvent) {
         } else {
             let pokemones = await filterName()
             fetchPokemonFilter(pokemones)
-            console.log(pokemones)
         }
     }
 }
@@ -42,7 +40,6 @@ async function filterName() {
         let urlPartida: string[] = pokemon.url.split("/")
         let numeroPokemon: number = parseInt(urlPartida[6])
         if (pokemon.name.includes(name) && numeroPokemon < 9999){
-            console.log(name)
             listaPokemon.push(pokemon.url)
         }
     })
